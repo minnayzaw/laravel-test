@@ -37,7 +37,46 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+      Schema::create('owners', function (Blueprint $table) {
+          $table->id();
+          $table->string('name');
+          $table->string('email')->unique();
+          $table->timestamp('email_verified_at')->nullable();
+          $table->string('password');
+          $table->rememberToken();
+          $table->timestamps();
+      });
+
+      Schema::create('seats', function (Blueprint $table) {
+          $table->id();
+          $table->string('name');
+          $table->string('type');
+          $table->integer('total')->unsigned();
+          $table->integer('price')->unsigned();
+          $table->timestamps();
+      });
+
+      Schema::create('cinemas', function (Blueprint $table) {
+          $table->id();
+          $table->string('name');
+          $table->integer('owner_id')->unsigned();
+          $table->foreign('owner_id')->references('id')->on('owners');
+          $table->integer('seat_id')->unsigned();
+          $table->foreign('seat_id')->references('id')->on('seats');
+          $table->timestamps();
+      });
+
+      Schema::create('films', function (Blueprint $table) {
+          $table->id();
+          $table->string('name');
+          $table->integer('cinema_id')->unsigned();
+          $table->foreign('cinema_id')->references('id')->on('cinemas');
+          $table->integer('user_id')->unsigned();
+          $table->foreign('user_id')->references('id')->on('users');
+          $table->timestamps();
+      });
+
+      throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
     /**
